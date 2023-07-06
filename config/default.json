@@ -1,3 +1,3 @@
 {
-    "mongoURI": "mongodb+srv://basithussain:123TYc123!@cluster0.pacpr8o.mongodb.net/?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://basithussain:<password>!@cluster0.pacpr8o.mongodb.net/?retryWrites=true&w=majority"
 }
