@@ -70,15 +70,85 @@ router.post(
 // @router PUT api/contacts/:id
 // @desc update a contact by id
 // @access private
-router.put("/:id", (req, res) => {
-  res.send("update a contact by id");
+router.put("/:id", auth, async (req, res) => {
+  const { name, email, phone, relation } = req.body;
+
+  let contact = await Contact.findById(req.params.id);
+
+  if (!contact) {
+    return res.status(404).json({
+      status: 404,
+      msg: "Contact not found",
+    });
+  }
+
+  const contactFields = {};
+  if (name) contactFields.name = name;
+  if (email) contactFields.email = email;
+  if (phone) contactFields.phone = phone;
+  if (relation) contactFields.relation = relation;
+
+  if (contact.user.toString() !== req.user.id) {
+    return res.status(401).json({
+      status: 401,
+      userId: contact.user,
+      id: req.user.id,
+      msg: "You do not have correct authorization",
+    });
+  }
+
+  try {
+    contact = await Contact.findByIdAndUpdate(
+      req.params.id,
+      { $set: contactFields },
+      { new: true }
+    );
+
+    res.json(contact);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: 500,
+      msg: "Server error",
+    });
+  }
 });
 
 // @router DELETE api/contacts/:id
 // @desc Delete a contact by id
 // @access private
-router.post("/:id", (req, res) => {
-  res.send("Delete a contact by id");
+router.delete("/:id", auth, async (req, res) => {
+  let contact = await Contact.findById(req.params.id);
+
+  if (!contact) {
+    return res.status(404).json({
+      status: 404,
+      msg: "Contact not found",
+    });
+  }
+
+  if (contact.user.toString() !== req.user.id) {
+    return res.status(401).json({
+      status: 401,
+      userId: contact.user,
+      id: req.user.id,
+      msg: "You do not have correct authorization",
+    });
+  }
+
+  try {
+    await Contact.findByIdAndRemove(req.params.id);
+
+    res.json({
+      msg: "This contact has been removed.",
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({
+      status: 500,
+      msg: "Server error",
+    });
+  }
 });
 
 module.exports = router;
