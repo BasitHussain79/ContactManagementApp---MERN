@@ -1,27 +1,17 @@
-import React, { useReducer } from "react";
+import { Grid } from "@mui/material";
+import React from "react";
+import Contacts from "../components/feature/Contacts";
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "Increment":
-      return { count: state.count + 1 };
-      break;
-    case "Decrement":
-      return { count: state.count - 1 };
-      break;
-    default:
-      return state;
-  }
-}
 const Home = () => {
-  const [state, dispatch] = useReducer(reducer, { count: 0 });
-  const increment = () => dispatch({ type: "Increment" });
-  const decrement = () => dispatch({ type: "Decrement" });
   return (
-    <div>
-      <h1>{state.count}</h1>
-      <button onClick={increment}>Increment</button>
-      <button onClick={decrement}>Decrement</button>
-    </div>
+    <Grid container>
+      <Grid item md={6}>
+        Contact will display here
+      </Grid>
+      <Grid item md={6}>
+        <Contacts />
+      </Grid>
+    </Grid>
   );
 };
 
