@@ -6,12 +6,10 @@ const Contacts = () => {
   const contactContext = useContext(ContactContext);
 
   const { contacts } = contactContext;
-  console.log(contacts);
-
   return (
     <Fragment>
       {contacts.map((data) => (
-        <ContactItem key={data.id} contact={contacts} />
+        <ContactItem key={data.id} contact={data} />
       ))}
     </Fragment>
   );
